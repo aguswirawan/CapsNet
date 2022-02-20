@@ -9,4 +9,4 @@
 #SBATCH --nodelist=komputasi04
 
 source ~/New_DE_CNN/bin/activate
-python capsulenet-multi-gpu_4class_ver5.py
+python capsulenet-multi-gpu_4class_ver5.py --subjects s01 s02 s03

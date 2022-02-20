@@ -4,3 +4,4 @@ deap_shuffled_MWMF_div*
 __pycache__/*
 logs/*
 sub_dependent*
+run.sh*
