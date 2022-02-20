@@ -273,7 +273,7 @@ if __name__ == "__main__":
                 os.makedirs(args.save_dir)
 
             if dataset_name == 'deap':          # load dreamer data
-                datasets,labels = data_load(subject,dimention,debaseline,dataset)
+                datasets,labels = data_load(subject,dimention,debaseline)
             
 
             args.save_dir = args.save_dir + '/' + debaseline + '/' + subject + '_' + dimention + str(args.epochs)
