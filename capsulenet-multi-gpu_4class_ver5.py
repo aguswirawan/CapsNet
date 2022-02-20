@@ -239,7 +239,7 @@ if __name__ == "__main__":
                         help="Number of iterations used in routing algorithm. should > 0")
     parser.add_argument('--debug', default=0, type=int,
                         help="Save weights by TensorBoard")
-    parser.add_argument('--save_dir', default='/content/drive/MyDrive/Data Doktor/Bahan Desertasi/Data & Alat/DEAP/Data_Uji_CapsNet/result_MWMF_div/sub_dependent_'+ model_version +'/') # other
+    parser.add_argument('--save_dir', default='sub_dependent_'+ model_version +'/') # other
     parser.add_argument('-t', '--testing', action='store_true',
                         help="Test the trained model on testing dataset")
     parser.add_argument('-w', '--weights', default=None,
