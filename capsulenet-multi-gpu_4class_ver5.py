@@ -27,7 +27,7 @@ def data_load(data_file,dimention,debaseline):
     label_suffix_arousal = ".mat_win_128_labels_arousal.pkl"
     arousal_or_valence = dimention
     with_or_without = debaseline # 'yes','not'
-    dataset_dir = "/content/drive/MyDrive/Data Doktor/Bahan Desertasi/Data & Alat/DEAP/Data_Uji_CapsNet/deap_shuffled_MWMF_div/" + with_or_without + "_" + arousal_or_valence + "/"
+    dataset_dir = "deap_shuffled_MWMF_div/" + with_or_without + "_" + arousal_or_valence + "/"
 
     ###load training set
     with open(dataset_dir + data_file + rnn_suffix, "rb") as fp:
@@ -101,7 +101,7 @@ def CapsNet(input_shape, n_class, routings, batch_size):
     # print(conv1.shape)
     conv2 = layers.Conv2D(filters=128, kernel_size=4, strides=1, padding='same', activation='relu', name='conv2')(conv1)
     conv3 = layers.Conv2D(filters=256, kernel_size=4, strides=1, padding='same', activation='relu', name='conv3')(conv2)
-    # conv4 = layers.Conv2D(filters=64, kernel_size=1, strides=1, padding='same', activation='relu', name='conv4')(conv3)
+    #conv4 = layers.Conv2D(filters=128, kernel_size=1, strides=1, padding='same', activation='relu', name='conv4')(conv3)
     # out_flat = layers.Flatten()(conv3)
     # conv5 = layers.Conv2D(filters=1024, kernel_size=1, strides=1, padding='same', activation='selu', name='conv5')(conv4)
 
@@ -218,7 +218,7 @@ time_start_whole = time.time()
 
 dataset_name = 'deap' #'deap' # dreamer
 #subjects = ['s21','s22','s23','s24','s25','s26','s28','s29','s30','s31','s32']  #  ['s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16']#,'s05']#,'s06','s07','s08']#,'s09','s10','s11','s12','s13','s14','s15','s16'，'s17','s18','s19','s20','s21','s22','s23','s24','s25','s26','s27','s28',]
-subjects = ['s01'] #'s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16','s17','s18','s19','s20',
+#subjects = ['s01'] #'s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16','s17','s18','s19','s20',
 # subjects = ['Data_Preprocessed_P01']
 dimentions = ['all']#,'arousal','dominance']
 debaseline = 'yes' # yes or not
@@ -227,8 +227,37 @@ model_version = 'v0' # v0:'CapsNet', v1:'MLF-CapsNet(w/o)', v2:'MLF-CapsNet'
 
 
 if __name__ == "__main__":
+    # setting the hyper parameters
+    import argparse
+    parser = argparse.ArgumentParser(description="Capsule Network on " + dataset_name)
+    parser.add_argument('--epochs', default=40, type=int)  # v0:20, v2:40
+    parser.add_argument('--subjects', default="s01", type=str)
+    parser.add_argument('--batch_size', default=2, type=int)
+    parser.add_argument('--lam_regularize', default=0.0, type=float,
+                        help="The coefficient for the regularizers")
+    parser.add_argument('-r', '--routings', default=3, type=int,
+                        help="Number of iterations used in routing algorithm. should > 0")
+    parser.add_argument('--debug', default=0, type=int,
+                        help="Save weights by TensorBoard")
+    parser.add_argument('--save_dir', default='/content/drive/MyDrive/Data Doktor/Bahan Desertasi/Data & Alat/DEAP/Data_Uji_CapsNet/result_MWMF_div/sub_dependent_'+ model_version +'/') # other
+    parser.add_argument('-t', '--testing', action='store_true',
+                        help="Test the trained model on testing dataset")
+    parser.add_argument('-w', '--weights', default=None,
+                        help="The path of the saved weights. Should be specified when testing")
+    parser.add_argument('--lr', default=1e-3, type=float,
+                        help="Initial learning rate")  # v0:0.0001, v2:0.00001
+    parser.add_argument('--gpus', default=0, type=int)
+    parser.add_argument('--lam_recon', default=0.392, type=float,
+                        help="The coefficient for the loss of decoder")
+    parser.add_argument('--lr_decay', default=0.9, type=float,
+                        help="The value multiplied by lr at each epoch. Set a larger value for larger epochs")
+    # parser.add_argument('--fold', default=10, type=int,
+                        # help="K fold cross validation")
+    args = parser.parse_args()
+    
+    
     for dimention in dimentions:
-        for subject in subjects:
+        for subject in args.subjects:
             import numpy as np
             import tensorflow as tf
             import os
@@ -236,32 +265,7 @@ if __name__ == "__main__":
             #from tensorflow.keras.utils.vis_utils import plot_model
             #from keras.utils import multi_gpu_model
 
-            # setting the hyper parameters
-            import argparse
-            parser = argparse.ArgumentParser(description="Capsule Network on " + dataset_name)
-            parser.add_argument('--epochs', default=40, type=int)  # v0:20, v2:40
-            parser.add_argument('--batch_size', default=2, type=int)
-            parser.add_argument('--lam_regularize', default=0.0, type=float,
-                                help="The coefficient for the regularizers")
-            parser.add_argument('-r', '--routings', default=3, type=int,
-                                help="Number of iterations used in routing algorithm. should > 0")
-            parser.add_argument('--debug', default=0, type=int,
-                                help="Save weights by TensorBoard")
-            parser.add_argument('--save_dir', default='/content/drive/MyDrive/Data Doktor/Bahan Desertasi/Data & Alat/DEAP/Data_Uji_CapsNet/result_MWMF_div/sub_dependent_'+ model_version +'/') # other
-            parser.add_argument('-t', '--testing', action='store_true',
-                                help="Test the trained model on testing dataset")
-            parser.add_argument('-w', '--weights', default=None,
-                                help="The path of the saved weights. Should be specified when testing")
-            parser.add_argument('--lr', default=1e-3, type=float,
-                                help="Initial learning rate")  # v0:0.0001, v2:0.00001
-            parser.add_argument('--gpus', default=0, type=int)
-            parser.add_argument('--lam_recon', default=0.392, type=float,
-                                help="The coefficient for the loss of decoder")
-            parser.add_argument('--lr_decay', default=0.9, type=float,
-                                help="The value multiplied by lr at each epoch. Set a larger value for larger epochs")
-            # parser.add_argument('--fold', default=10, type=int,
-                                # help="K fold cross validation")
-            args = parser.parse_args()
+            
 
             print(time.asctime(time.localtime(time.time())))
             print(args)
@@ -269,7 +273,7 @@ if __name__ == "__main__":
                 os.makedirs(args.save_dir)
 
             if dataset_name == 'deap':          # load dreamer data
-                datasets,labels = data_load(subject,dimention,debaseline)
+                datasets,labels = data_load(subject,dimention,debaseline,dataset)
             
 
             args.save_dir = args.save_dir + '/' + debaseline + '/' + subject + '_' + dimention + str(args.epochs)
