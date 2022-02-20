@@ -231,7 +231,7 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="Capsule Network on " + dataset_name)
     parser.add_argument('--epochs', default=40, type=int)  # v0:20, v2:40
-    parser.add_argument('--subjects', default="s01", type=str)
+    parser.add_argument('--subjects', default=["s01"], nargs='+')
     parser.add_argument('--batch_size', default=2, type=int)
     parser.add_argument('--lam_regularize', default=0.0, type=float,
                         help="The coefficient for the regularizers")
