@@ -12,7 +12,7 @@ Usage:
 from tensorflow.keras import backend as K
 from tensorflow.keras import layers, models, optimizers,regularizers
 from capsulelayers import CapsuleLayer, PrimaryCap, Length, Mask
-import tensorflows as tf
+import tensorflow as tf
 
 K.set_image_data_format('channels_last')
 
