@@ -227,6 +227,8 @@ model_version = 'v0' # v0:'CapsNet', v1:'MLF-CapsNet(w/o)', v2:'MLF-CapsNet'
 
 
 if __name__ == "__main__":
+    tf.config.threading.set_intra_op_parallelism_threads(20)
+    tf.config.threading.set_inter_op_parallelism_threads(20)
     # setting the hyper parameters
     import argparse
     parser = argparse.ArgumentParser(description="Capsule Network on " + dataset_name)
