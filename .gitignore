@@ -4,5 +4,5 @@ amigos_shuffled*
 .DS_Store*
 __pycache__/*
 logs/*
-sub_dependent*
+sub_dependent_v0/*
 run.sh*
