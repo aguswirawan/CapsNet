@@ -11,4 +11,4 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/m450296/miniconda3/envs/virtenv/
 
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate virtenv
-python capsulenet-multi-gpu_4class_group1.py
+python capsulenet-dreamer_hyper4_ver1.py
