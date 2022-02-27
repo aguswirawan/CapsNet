@@ -247,7 +247,7 @@ if __name__ == "__main__":
                                 help="Number of iterations used in routing algorithm. should > 0")
             parser.add_argument('--debug', default=0, type=int,
                                 help="Save weights by TensorBoard")
-            parser.add_argument('--save_dir', default='result_hyper4/sub_dependent_'+ model_version +'/') # other
+            parser.add_argument('--save_dir', default='dreamer_result_hyper4/sub_dependent_'+ model_version +'/') # other
             parser.add_argument('-t', '--testing', action='store_true',
                                 help="Test the trained model on testing dataset")
             parser.add_argument('-w', '--weights', default=None,
