@@ -27,7 +27,7 @@ def data_load(data_file,dimention,debaseline):
     label_suffix_arousal = ".mat_win_128_labels_arousal.pkl"
     arousal_or_valence = dimention
     with_or_without = debaseline # 'yes','not'
-    dataset_dir = "deap_shuffled_dataset/" + with_or_without + "_" + arousal_or_valence + "/"
+    dataset_dir = "amigos_shuffled/deap_shuffled_dataset/" + with_or_without + "_" + arousal_or_valence + "/"
 
     ###load training set
     with open(dataset_dir + data_file + rnn_suffix, "rb") as fp:
