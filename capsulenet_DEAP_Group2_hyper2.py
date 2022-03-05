@@ -97,10 +97,10 @@ def CapsNet(input_shape, n_class, routings, batch_size):
     # print(x.shape)
 
     # Layer 1: Just a conventional Conv2D layer
-    conv1 = layers.Conv2D(filters=64, kernel_size=4, strides=1, padding='same', activation='relu', name='conv1')(x)
+    conv1 = layers.Conv2D(filters=64, kernel_size=3, strides=1, padding='same', activation='relu', name='conv1')(x)
     # print(conv1.shape)
-    conv2 = layers.Conv2D(filters=128, kernel_size=4, strides=1, padding='same', activation='relu', name='conv2')(conv1)
-    conv3 = layers.Conv2D(filters=256, kernel_size=4, strides=1, padding='same', activation='relu', name='conv3')(conv2)
+    conv2 = layers.Conv2D(filters=128, kernel_size=3, strides=1, padding='same', activation='relu', name='conv2')(conv1)
+    conv3 = layers.Conv2D(filters=256, kernel_size=3, strides=1, padding='same', activation='relu', name='conv3')(conv2)
     conv4 = layers.Conv2D(filters=64, kernel_size=1, strides=1, padding='same', activation='relu', name='conv4')(conv3)
     # out_flat = layers.Flatten()(conv3)
 #    conv5 = layers.Conv2D(filters=1024, kernel_size=1, strides=1, padding='same', activation='selu', name='conv5')(conv4)
@@ -218,8 +218,8 @@ time_start_whole = time.time()
 
 dataset_name = 'deap' #'deap' # dreamer
 #subjects = ['s21','s22','s23','s24','s25','s26','s28','s29','s30','s31','s32']  #  ['s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16']#,'s05']#,'s06','s07','s08']#,'s09','s10','s11','s12','s13','s14','s15','s16'，'s17','s18','s19','s20','s21','s22','s23','s24','s25','s26','s27','s28',]
-subjects = ['s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16']
-# subjects = ['Data_Preprocessed_P01']
+subjects = ['s17','s18','s19','s20','s21','s22','s23','s24','s25','s26','s27','s28','s29','s30','s31','s32']
+#subjects = ['s17']
 dimentions = ['all']#,'arousal','dominance']
 debaseline = 'no' # yes or not
 tune_overfit = 'tune_overfit'
@@ -247,7 +247,7 @@ if __name__ == "__main__":
                                 help="Number of iterations used in routing algorithm. should > 0")
             parser.add_argument('--debug', default=0, type=int,
                                 help="Save weights by TensorBoard")
-            parser.add_argument('--save_dir', default='result_DEAP_hyper3/sub_dependent_'+ model_version +'/') # other
+            parser.add_argument('--save_dir', default='result_DEAP_hyper2/sub_dependent_'+ model_version +'/') # other
             parser.add_argument('-t', '--testing', action='store_true',
                                 help="Test the trained model on testing dataset")
             parser.add_argument('-w', '--weights', default=None,

@@ -27,7 +27,7 @@ def data_load(data_file,dimention,debaseline):
     label_suffix_arousal = ".mat_win_128_labels_arousal.pkl"
     arousal_or_valence = dimention
     with_or_without = debaseline # 'yes','not'
-    dataset_dir = "amigos_shuffled/deap_shuffled_dataset/" + with_or_without + "_" + arousal_or_valence + "/"
+    dataset_dir = "amigos_shuffled/Group/" + with_or_without + "_" + arousal_or_valence + "/"
 
     ###load training set
     with open(dataset_dir + data_file + rnn_suffix, "rb") as fp:
@@ -97,13 +97,13 @@ def CapsNet(input_shape, n_class, routings, batch_size):
     # print(x.shape)
 
     # Layer 1: Just a conventional Conv2D layer
-    conv1 = layers.Conv2D(filters=64, kernel_size=4, strides=1, padding='same', activation='relu', name='conv1')(x)
+    conv1 = layers.Conv2D(filters=64, kernel_size=2, strides=1, padding='same', activation='relu', name='conv1')(x)
     # print(conv1.shape)
-    conv2 = layers.Conv2D(filters=128, kernel_size=4, strides=1, padding='same', activation='relu', name='conv2')(conv1)
-    conv3 = layers.Conv2D(filters=256, kernel_size=4, strides=1, padding='same', activation='relu', name='conv3')(conv2)
+    conv2 = layers.Conv2D(filters=128, kernel_size=2, strides=1, padding='same', activation='relu', name='conv2')(conv1)
+    conv3 = layers.Conv2D(filters=256, kernel_size=2, strides=1, padding='same', activation='relu', name='conv3')(conv2)
     conv4 = layers.Conv2D(filters=64, kernel_size=1, strides=1, padding='same', activation='relu', name='conv4')(conv3)
     # out_flat = layers.Flatten()(conv3)
-#    conv5 = layers.Conv2D(filters=1024, kernel_size=1, strides=1, padding='same', activation='selu', name='conv5')(conv4)
+    # conv5 = layers.Conv2D(filters=1024, kernel_size=1, strides=1, padding='same', activation='selu', name='conv5')(conv4)
 
     # Layer 2: Conv2D layer with `squash` activation, then reshape to [None, num_capsule, dim_capsule]
     # primarycaps = PrimaryCap(conv3, dim_capsule=8, n_channels=32, kernel_size=4, strides=2, padding='same')
@@ -216,10 +216,11 @@ def train(model,  # type: models.Model
 
 time_start_whole = time.time()
 
-dataset_name = 'deap' #'deap' # dreamer
+dataset_name = 'amigos' #'deap' # dreamer
 #subjects = ['s21','s22','s23','s24','s25','s26','s28','s29','s30','s31','s32']  #  ['s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16']#,'s05']#,'s06','s07','s08']#,'s09','s10','s11','s12','s13','s14','s15','s16'，'s17','s18','s19','s20','s21','s22','s23','s24','s25','s26','s27','s28',]
-subjects = ['s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16']
-# subjects = ['Data_Preprocessed_P01']
+# subjects = ['s01'] #'s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16','s17','s18','s19','s20',
+subjects = ['Data_Preprocessed_P01','Data_Preprocessed_P02','Data_Preprocessed_P03','Data_Preprocessed_P04','Data_Preprocessed_P05','Data_Preprocessed_P06','Data_Preprocessed_P07','Data_Preprocessed_P09','Data_Preprocessed_P10','Data_Preprocessed_P13','Data_Preprocessed_P14','Data_Preprocessed_P15','Data_Preprocessed_P16']
+# subjects = ['Data_Preprocessed_P09']
 dimentions = ['all']#,'arousal','dominance']
 debaseline = 'no' # yes or not
 tune_overfit = 'tune_overfit'
@@ -247,7 +248,7 @@ if __name__ == "__main__":
                                 help="Number of iterations used in routing algorithm. should > 0")
             parser.add_argument('--debug', default=0, type=int,
                                 help="Save weights by TensorBoard")
-            parser.add_argument('--save_dir', default='result_DEAP_hyper3/sub_dependent_'+ model_version +'/') # other
+            parser.add_argument('--save_dir', default='result_amigos_hyper1/Group/sub_dependent_'+ model_version +'/') # other
             parser.add_argument('-t', '--testing', action='store_true',
                                 help="Test the trained model on testing dataset")
             parser.add_argument('-w', '--weights', default=None,
@@ -268,7 +269,7 @@ if __name__ == "__main__":
             if not os.path.exists(args.save_dir):
                 os.makedirs(args.save_dir)
 
-            if dataset_name == 'deap':          # load dreamer data
+            if dataset_name == 'amigos':          # load dreamer data
                 datasets,labels = data_load(subject,dimention,debaseline)
             
 
@@ -276,7 +277,7 @@ if __name__ == "__main__":
             if not os.path.exists(args.save_dir):
                 os.makedirs(args.save_dir)
 
-            fold = 10
+            fold = 8
             test_accuracy_allfold = np.zeros(shape=[0], dtype=float)
             train_used_time_allfold = np.zeros(shape=[0], dtype=float)
             test_used_time_allfold = np.zeros(shape=[0], dtype=float)

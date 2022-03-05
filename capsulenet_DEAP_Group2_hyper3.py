@@ -101,9 +101,9 @@ def CapsNet(input_shape, n_class, routings, batch_size):
     # print(conv1.shape)
     conv2 = layers.Conv2D(filters=128, kernel_size=4, strides=1, padding='same', activation='relu', name='conv2')(conv1)
     conv3 = layers.Conv2D(filters=256, kernel_size=4, strides=1, padding='same', activation='relu', name='conv3')(conv2)
-    conv4 = layers.Conv2D(filters=128, kernel_size=4, strides=1, padding='same', activation='relu', name='conv4')(conv3)
+    conv4 = layers.Conv2D(filters=64, kernel_size=1, strides=1, padding='same', activation='relu', name='conv4')(conv3)
     # out_flat = layers.Flatten()(conv3)
-    # conv5 = layers.Conv2D(filters=1024, kernel_size=1, strides=1, padding='same', activation='selu', name='conv5')(conv4)
+#    conv5 = layers.Conv2D(filters=1024, kernel_size=1, strides=1, padding='same', activation='selu', name='conv5')(conv4)
 
     # Layer 2: Conv2D layer with `squash` activation, then reshape to [None, num_capsule, dim_capsule]
     # primarycaps = PrimaryCap(conv3, dim_capsule=8, n_channels=32, kernel_size=4, strides=2, padding='same')
@@ -218,8 +218,8 @@ time_start_whole = time.time()
 
 dataset_name = 'deap' #'deap' # dreamer
 #subjects = ['s21','s22','s23','s24','s25','s26','s28','s29','s30','s31','s32']  #  ['s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16']#,'s05']#,'s06','s07','s08']#,'s09','s10','s11','s12','s13','s14','s15','s16'，'s17','s18','s19','s20','s21','s22','s23','s24','s25','s26','s27','s28',]
-#subjects = ['s27','s18','s19','s20','s21','s22','s23','s24','s25','s26','s27','s28','s29','s30','s31','s32']
-subjects = ['s17']
+subjects = ['s17','s18','s19','s20','s21','s22','s23','s24','s25','s26','s27','s28','s29','s30','s31','s32']
+#subjects = ['s17']
 dimentions = ['all']#,'arousal','dominance']
 debaseline = 'no' # yes or not
 tune_overfit = 'tune_overfit'
