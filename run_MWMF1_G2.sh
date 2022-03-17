@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#SBATCH --job-name=DREAMER
+#SBATCH --job-name=MWMF
 #SBATCH --output=logs/capsnet_%A.out
 #SBATCH --error=logs/capsnet_%A.err
 #

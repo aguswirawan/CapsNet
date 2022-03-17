@@ -318,7 +318,7 @@ if __name__ == "__main__":
                 train_start_time = time.time()
                 _, history = train(model=multi_model, data=((x_train, y_train), (x_test, y_test)), args=args, fold=curr_fold)
                 train_used_time_fold = time.time() - train_start_time
-                model.save_weights(args.save_dir + '/trained_model_fold'+str(curr_fold)+'.h5')
+               # model.save_weights(args.save_dir + '/trained_model_fold'+str(curr_fold)+'.h5')
                 print('Trained model saved to \'%s/trained_model_fold%s.h5\'' % (args.save_dir,curr_fold))
                 print('Train time: ', train_used_time_fold)
 
