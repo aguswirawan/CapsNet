@@ -217,7 +217,7 @@ def train(model,  # type: models.Model
 time_start_whole = time.time()
 
 dataset_name = 'dreamer' #'deap' # dreamer
-subjects = ['res01','res02','res03','res04','res05','res06','res07','res08','res09','res10','res11'] 
+subjects = ['res06','res07','res08','res09','res10','res11'] 
 # subjects = ['res09'] #'s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16','s17','s18','s19','s20',
 # subjects = ['Data_Preprocessed_P01']
 dimentions = ['all']#,'arousal','dominance']
@@ -247,7 +247,7 @@ if __name__ == "__main__":
                                 help="Number of iterations used in routing algorithm. should > 0")
             parser.add_argument('--debug', default=0, type=int,
                                 help="Save weights by TensorBoard")
-            parser.add_argument('--save_dir', default='result_MWMF_div/sub_dependent_'+ model_version +'/') # other
+            parser.add_argument('--save_dir', default='dreamer_result_MWMF_div/sub_dependent_'+ model_version +'/') # other
             parser.add_argument('-t', '--testing', action='store_true',
                                 help="Test the trained model on testing dataset")
             parser.add_argument('-w', '--weights', default=None,
