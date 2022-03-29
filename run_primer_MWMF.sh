@@ -11,4 +11,4 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/m450296/miniconda3/envs/virtenv/
 
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate virtenv
-python capsulenet_primer - Intersubject.py
+python capsulenet_primer-independent-V1.py

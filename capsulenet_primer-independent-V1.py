@@ -185,6 +185,8 @@ def train(model,  # type: models.Model
     checkpoint = callbacks.ModelCheckpoint(args.save_dir + '/weights-{epoch:02d}.h5', monitor='val_capsnet_acc',
                                            save_best_only=True, save_weights_only=True, verbose=1)
     lr_decay = callbacks.LearningRateScheduler(schedule=lambda epoch: args.lr * (args.lr_decay ** epoch))
+     #untuk fungsi early stoping
+    early_stoping = callbacks.EarlyStopping(monitor='loss', patience=3, restore_best_weights=True)
 
     # compile the model
     # model.compile(optimizer=optimizers.Adam(lr=args.lr),
@@ -206,7 +208,7 @@ def train(model,  # type: models.Model
 
     # Training without data augmentation:
     history = model.fit([x_train, y_train], y_train, batch_size=args.batch_size, epochs=args.epochs,
-                        callbacks=[log, checkpoint, lr_decay])
+                        callbacks=[log, checkpoint, lr_decay,early_stoping])
 
     model.save_weights(args.save_dir + '/trained_model.h5')
     print('Trained model saved to \'%s/trained_model.h5\'' % args.save_dir)
@@ -222,7 +224,7 @@ dataset_name = 'primer' #'deap' # dreamer
 #subjects = ['s21','s22','s23','s24','s25','s26','s28','s29','s30','s31','s32']  #  ['s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16']#,'s05']#,'s06','s07','s08']#,'s09','s10','s11','s12','s13','s14','s15','s16'，'s17','s18','s19','s20','s21','s22','s23','s24','s25','s26','s27','s28',]
 # subjects = ['s01'] #'s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16','s17','s18','s19','s20',
 subjects = ['Sub01','Sub02','Sub03','Sub04','Sub05','Sub06','Sub07','Sub08','Sub09','Sub10','Sub11','Sub12','Sub13','Sub14','Sub15','Sub16','Sub17','Sub18','Sub19','Sub20','Sub21','Sub22','Sub23','Sub24']
-# subjects = ['Data_Preprocessed_P09']
+#subjects = ['Sub01','Sub02']
 dimentions = ['all']#,'arousal','dominance']
 debaseline = 'yes' # yes or not
 tune_overfit = 'tune_overfit'
@@ -242,7 +244,7 @@ if __name__ == "__main__":
     # setting the hyper parameters
     import argparse
     parser = argparse.ArgumentParser(description="Capsule Network on " + dataset_name)
-    parser.add_argument('--epochs', default=40, type=int)  # v0:20, v2:40
+    parser.add_argument('--epochs', default=100, type=int)  # v0:20, v2:40
     parser.add_argument('--batch_size', default=2, type=int)
     parser.add_argument('--lam_regularize', default=0.0, type=float,
                         help="The coefficient for the regularizers")
@@ -250,7 +252,7 @@ if __name__ == "__main__":
                         help="Number of iterations used in routing algorithm. should > 0")
     parser.add_argument('--debug', default=0, type=int,
                         help="Save weights by TensorBoard")
-    parser.add_argument('--save_dir', default='result_primer_MWMF/sub_dependent_'+ model_version +'/') # other
+    parser.add_argument('--save_dir', default='result_independent_MWMF_div/sub_dependent_'+ model_version +'/') # other
     parser.add_argument('-t', '--testing', action='store_true',
                         help="Test the trained model on testing dataset")
     parser.add_argument('-w', '--weights', default=None,
@@ -378,7 +380,7 @@ if __name__ == "__main__":
             y_pred_subject = eval_model.predict(X_test_dict[subject], batch_size=args.batch_size)
             test_acc_fold_subject = np.sum(np.argmax(y_pred_subject, 1) == np.argmax(y_test_list[subject], 1)) / y_test_list[subject].shape[0]
             print (test_acc_fold_subject)
-            test_accuracy_subject_allfold[subject] = np.append(test_acc_fold_subject, test_acc_fold_subject)
+            test_accuracy_subject_allfold[subject] = np.append(test_accuracy_subject_allfold[subject], test_acc_fold_subject)
 
         print('-' * 30 + 'fold  ' + str(curr_fold) + '  End: test' + '-' * 30)
         test_accuracy_allfold = np.append(test_accuracy_allfold, test_acc_fold)
@@ -388,7 +390,9 @@ if __name__ == "__main__":
 
         K.clear_session()
 
-    summary = pd.DataFrame({'fold': range(1,fold+1), 'Test accuracy': test_accuracy_allfold, 'loss': loss_allfold, 'train time': train_used_time_allfold, 'test time': test_used_time_allfold})
+    summary_dict = {'fold': range(1,fold+1), 'Test accuracy': test_accuracy_allfold, 'loss': loss_allfold, 'train time': train_used_time_allfold, 'test time': test_used_time_allfold}
+    summary_dict.update({f'{subject} accuracy': test_accuracy_subject_allfold[subject] for subject in subjects})    
+    summary = pd.DataFrame(summary_dict)
     hyperparam = pd.DataFrame({'average acc of 10 folds': np.mean(test_accuracy_allfold), 'average loss of 10 folds': np.mean(loss_allfold), 'average train time of 10 folds': np.mean(train_used_time_allfold), 'average test time of 10 folds': np.mean(test_used_time_allfold),'epochs': args.epochs, 'lr':args.lr, 'batch size': args.batch_size},index=['dimention/sub'])
     writer = pd.ExcelWriter(args.save_dir + '/'+'summary'+ '_'+subject+'.xlsx')
     summary.to_excel(writer, 'Result', index=False)
