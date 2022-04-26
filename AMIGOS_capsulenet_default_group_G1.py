@@ -27,7 +27,7 @@ def data_load(data_file,dimention,debaseline):
     label_suffix_arousal = ".mat_win_128_labels_arousal.pkl"
     arousal_or_valence = dimention
     with_or_without = debaseline # 'yes','not'
-    dataset_dir = "amigos_shuffled/amigos_shuffled_default_div/Group/" + with_or_without + "_" + arousal_or_valence + "/"
+    dataset_dir = "amigos_shuffled/amigos_shuffled_default_fractional/Group/" + with_or_without + "_" + arousal_or_valence + "/"
 
     ###load training set
     with open(dataset_dir + data_file + rnn_suffix, "rb") as fp:
@@ -248,7 +248,7 @@ if __name__ == "__main__":
                                 help="Number of iterations used in routing algorithm. should > 0")
             parser.add_argument('--debug', default=0, type=int,
                                 help="Save weights by TensorBoard")
-            parser.add_argument('--save_dir', default='amigos_result_MWMF_div/Group/sub_dependent_'+ model_version +'/') # other
+            parser.add_argument('--save_dir', default='amigos_result_default_fractional/Group/sub_dependent_'+ model_version +'/') # other
             parser.add_argument('-t', '--testing', action='store_true',
                                 help="Test the trained model on testing dataset")
             parser.add_argument('-w', '--weights', default=None,

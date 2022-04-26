@@ -27,7 +27,7 @@ def data_load(data_file,dimention,debaseline):
     label_suffix_arousal = ".mat_win_128_labels_arousal.pkl"
     arousal_or_valence = dimention
     with_or_without = debaseline # 'yes','not'
-    dataset_dir = "amigos_shuffled/dreamer_shuffled_default_div/" + with_or_without + "_" + arousal_or_valence + "/"
+    dataset_dir = "amigos_shuffled/dreamer_shuffled_default_fractional/" + with_or_without + "_" + arousal_or_valence + "/"
 
     ###load training set
     with open(dataset_dir + data_file + rnn_suffix, "rb") as fp:
@@ -217,7 +217,7 @@ def train(model,  # type: models.Model
 time_start_whole = time.time()
 
 dataset_name = 'dreamer' #'deap' # dreamer
-subjects = ['res06','res07','res08','res09','res10','res11'] 
+subjects = ['res01','res02','res03','res04','res05','res06','res07','res08','res09','res10','res11','res12','res13','res14','res15','res16','res17','res18','res19','res20','res21','res22','res23'] 
 # subjects = ['res09'] #'s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16','s17','s18','s19','s20',
 # subjects = ['Data_Preprocessed_P01']
 dimentions = ['all']#,'arousal','dominance']
@@ -247,7 +247,7 @@ if __name__ == "__main__":
                                 help="Number of iterations used in routing algorithm. should > 0")
             parser.add_argument('--debug', default=0, type=int,
                                 help="Save weights by TensorBoard")
-            parser.add_argument('--save_dir', default='dreamer_result_default_div/sub_dependent_'+ model_version +'/') # other
+            parser.add_argument('--save_dir', default='dreamer_result_default_fractional/sub_dependent_'+ model_version +'/') # other
             parser.add_argument('-t', '--testing', action='store_true',
                                 help="Test the trained model on testing dataset")
             parser.add_argument('-w', '--weights', default=None,
